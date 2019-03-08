@@ -245,6 +245,26 @@ class AlipaySdk {
     });
   }
 
+  // page 类接口
+  getOrderStr(method: string, option: IRequestOption = {}): Promise<string> {
+    let signParams = { alipaySdk: this.sdkVersion } as { [key: string]: string | Object };
+    const config = this.config;
+
+    option.formData.getFields().forEach((field) => {
+      signParams[field.name] = field.value;
+    });
+
+    // 签名方法中使用的 key 是驼峰
+    signParams = camelcaseKeys(signParams, { deep: true });
+
+    // 计算签名
+    const signData = sign(method, signParams, config);
+    // 格式化 url
+    const { url } = this.formatUrl('', signData);
+
+    return url.slice(1);
+  }
+
   /**
    *
    * @param originStr 开放平台返回的原始字符串
