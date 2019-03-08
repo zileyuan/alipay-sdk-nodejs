@@ -40,10 +40,10 @@ function sign(method: string, params: any = {}, config: AlipaySdkConfig): any {
   }
 
   // params key 驼峰转下划线
-  const decamelizeParams = snakeCaseKeys(signParams).sort();
+  const decamelizeParams = snakeCaseKeys(signParams);
 
   // 排序
-  const signStr = Object.keys(decamelizeParams).map((key) => {
+  const signStr = Object.keys(decamelizeParams).sort().map((key) => {
     let data = decamelizeParams[key];
     if (Array.prototype.toString.call(data) !== '[object String]') {
       data = JSON.stringify(data);
