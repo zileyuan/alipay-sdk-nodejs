@@ -281,7 +281,6 @@ class AlipaySdk {
 
     // 计算签名
     let signData = sign(method, signParams, config);
-    signData.
     // 格式化 url
     const { url } = this.formatUrl2('', signData);
 
