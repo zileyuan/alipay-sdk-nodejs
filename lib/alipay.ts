@@ -245,6 +245,28 @@ class AlipaySdk {
     });
   }
 
+  // 格式化请求 url（按规范把某些固定的参数放入 url）
+  private formatUrl2(url: string, params: { [key: string]: string }): { execParams: any, url: string } {
+    let requestUrl = url;
+    // 需要放在 url 中的参数列表
+    const urlArgs = [
+      'app_id', 'method', 'format', 'charset', 'biz_content',
+      'sign_type', 'sign', 'timestamp', 'version',
+      'notify_url', 'return_url', 'auth_token', 'app_auth_token',
+    ];
+
+    for (const key in params) {
+      if (urlArgs.indexOf(key) > -1) {
+        const val = encodeURIComponent(params[key]);
+        requestUrl = `${requestUrl}${ requestUrl.includes('?') ? '&' : '?' }${key}=${val}`;
+        // 删除 postData 中对应的数据
+        delete params[key];
+      }
+    }
+
+    return { execParams: params, url: requestUrl };
+  }
+
   // page 类接口
   getOrderStr(method: string, option: IRequestOption = {}): string {
     let signParams = { alipaySdk: this.sdkVersion } as { [key: string]: string | Object };
@@ -258,9 +280,10 @@ class AlipaySdk {
     signParams = camelcaseKeys(signParams, { deep: true });
 
     // 计算签名
-    const signData = sign(method, signParams, config);
+    let signData = sign(method, signParams, config);
+    signData.
     // 格式化 url
-    const { url } = this.formatUrl('', signData);
+    const { url } = this.formatUrl2('', signData);
 
     return url.slice(1);
   }

@@ -55,6 +55,7 @@ declare class AlipaySdk {
     private formatUrl;
     private multipartExec;
     private pageExec;
+    private formatUrl2;
     getOrderStr(method: string, option?: IRequestOption): string;
     /**
      *
