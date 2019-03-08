@@ -270,7 +270,7 @@ class AlipaySdk {
 
   // page 类接口
   getOrderStr(method: string, option: IRequestOption = {}): string {
-    let signParams = { alipaySdk: this.sdkVersion } as { [key: string]: string | Object };
+    let signParams = { } as { [key: string]: string | Object };
     const config = this.config;
 
     option.formData.getFields().forEach((field) => {
