@@ -14,7 +14,7 @@ import * as snakeCaseKeys from 'snakecase-keys';
 import * as iconv from 'iconv-lite';
 
 import AliPayForm from './form';
-import { sign, ALIPAY_ALGORITHM_MAPPING } from './util';
+import { sign, sign2, ALIPAY_ALGORITHM_MAPPING } from './util';
 
 const pkg = require('../package.json');
 
@@ -282,6 +282,34 @@ class AlipaySdk {
 
     // 计算签名
     let signData = sign(method, signParams, config);
+    let signCode = signData.sign;
+    delete signData.sign;
+
+
+    let signStr = Object.keys(signData).sort().map((key) => {
+      let data = signData[key];
+      if (Array.prototype.toString.call(data) !== '[object String]') {
+        data = JSON.stringify(data);
+      }
+      return `${key}=${encodeURIComponent(iconv.encode(data, config.charset).toString())}`;
+    }).join('&');
+    signStr = signStr + '&sign=' +  encodeURIComponent(signCode);
+    return signStr;
+  }
+
+  getAuthStr(method: string, option: IRequestOption = {}): string {
+    let signParams = { } as { [key: string]: string | Object };
+    const config = this.config;
+
+    option.formData.getFields().forEach((field) => {
+      signParams[field.name] = field.value;
+    });
+
+    // 签名方法中使用的 key 是驼峰
+    signParams = camelcaseKeys(signParams, { deep: true });
+
+    // 计算签名
+    let signData = sign2(method, signParams, config);
     let signCode = signData.sign;
     delete signData.sign;
 
