@@ -56,6 +56,7 @@ declare class AlipaySdk {
     private multipartExec;
     private pageExec;
     getOrderStr(method: string, option?: IRequestOption): string;
+    getAuthStr(method: string, option?: IRequestOption): string;
     /**
      *
      * @param originStr 开放平台返回的原始字符串

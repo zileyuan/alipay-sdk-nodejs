@@ -15,4 +15,5 @@ declare const ALIPAY_ALGORITHM_MAPPING: {
  * @param {object} config sdk 配置
  */
 declare function sign(method: string, params: any, config: AlipaySdkConfig): any;
-export { sign, ALIPAY_ALGORITHM_MAPPING, };
+declare function sign2(method: string, params: any, config: AlipaySdkConfig): any;
+export { sign, sign2, ALIPAY_ALGORITHM_MAPPING, };
